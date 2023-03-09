@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  memcached:
+    image: memcached:alpine
+    container_name: xampp-cloud-memcached
+    ports:
+      - 11211:11211
+    networks:
+      - xampp-cloud
+      
+  apache2:
+    build: 
+      context: ./images/apache2
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+    environment:
+      - PHP_VERSION=${PHP_VERSION}
+    container_name: xampp-cloud-apache2
+    volumes:
+      - ../src:/var/www/html
+      - ./images/apache2/virtual-hosts.conf:/etc/apache2/sites-enabled/virtual-hosts.conf:rw
+      - ./images/apache2/php.ini:/usr/local/etc/php/php.ini:rw
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - xampp-cloud
+
+  mysql:
+    image: mysql:5.7.41
+    container_name: xampp-cloud-db
+    command: mysqld --sql_mode=""
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    restart: on-failure
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+      - ./images/mysql/my.cnf:/etc/my.cnf
+    ports:
+      - '3306:3306'
+    networks:
+      - xampp-cloud
+
+  phpmyadmin:
+    container_name: xampp-cloud-phpmyadmin
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_VERBOSE=mysql
+      - UPLOAD_LIMIT=2048M
+    networks:
+      - xampp-cloud
+      
+networks:
+  xampp-cloud:
+    name: xampp-cloud-network

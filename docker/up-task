@@ -1,0 +1,34 @@
+#!/bin/bash
+. ./.env
+sudo service apache2 stop
+
+#create .env from env.sample
+if [ -e ./.env ]; then
+    echo "CONFIG file was found"
+else
+    cp ./env.sample .env
+    echo "CONFIG file was created from config.sample"
+fi
+
+#env.sample
+if [ $ENVIROMENT == "production" ]; then
+  echo "ENVIROMENT: production"
+else
+  echo "ENVIROMENT: devel"
+fi
+
+#params
+if [ $# -eq 0 ] ; then
+    param=""
+else
+    param=$1
+fi
+
+inDetached="-d"; #run in detached mode
+if [ "$param" = "$inDetached" ]; then
+    sudo docker-compose up -d --build
+    sudo docker ps --format "table {{.Names}}\t\t{{.Image}}\t\t{{.Ports}}"
+    echo '- Xampp Cloud is running in detached mod'
+else
+    sudo docker-compose up --build
+fi

@@ -1,0 +1,18 @@
+#!/bin/bash
+echo "Prajete si vymazat vsetky images, containers a volumes?";
+echo "Tato zmena je nezvratna.";
+echo "[Y/n]:";
+read delet;
+if [ $delet == 'Y' ]; then
+	sudo docker-compose down -f ../docker-compose.yml
+	sudo docker system prune
+	sudo docker system prune -a
+	sudo docker kill $(sudo docker ps -q)
+	sudo docker ps -aq | xargs sudo docker stop | xargs sudo docker rm
+	sudo docker system prune -a --volumes
+	sudo docker rmi -f $(sudo docker images -aq)
+	sudo docker ps
+else
+	echo "Vymazanie nebolo uspesne."
+	exit 1;
+fi;

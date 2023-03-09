@@ -1,0 +1,27 @@
+#!/bin/bash
+
+while true
+do
+  # Get a list of all containers connected to the "xampp-cloud-network" network
+  containers=$(sudo docker network inspect xampp-cloud-network --format='{{range $k, $v := .Containers}}{{printf "%s\n" $k}}{{end}}')
+
+  # Loop through the containers and get their CPU and memory usage
+  for container in $containers
+  do
+    # Get the container's ID and name
+    id=$(sudo docker ps --filter "name=$container" --format "{{.ID}}")
+    name=$(sudo docker ps --filter "name=$container" --format "{{.Names}}")
+
+    # Get the container's CPU usage as a percentage
+    cpu_usage=$(sudo docker stats --no-stream $id --format "{{.CPUPerc}}" | awk '{print $1}')
+
+    # Get the container's memory usage as a percentage
+    mem_usage=$(sudo docker stats --no-stream $id --format "{{.MemPerc}}" | awk '{print $1}')
+
+    # Print the container's name, CPU usage, and memory usage
+    echo "Container: $name, CPU Usage: $cpu_usage%, Memory Usage: $mem_usage%"
+  done
+
+  # Wait for 10 seconds before checking again
+  sleep 1
+done

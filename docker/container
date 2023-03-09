@@ -1,0 +1,14 @@
+#!/bin/bash
+#sudo docker ps;
+#containers=$(sudo docker network inspect markiza-cloud-network --format='{{range $k, $v := .Containers}}{{printf "%s\n" $k}}{{end}}')
+#echo $containers
+sudo docker ps --filter "network=xampp-cloud-network" --format "table {{.Names}}\t\t{{.Image}}\t\t{{.ID}}"
+echo 'pre vstup do kontajnera prosim zadajte CONTAINER ID';
+read containerId;
+#wait;
+if  [ -n "$containerId" ];then
+	sudo docker exec -it $containerId /bin/sh;
+	#sudo docker exec -it $containerId apt-get update && apt-get install nano -y;
+else
+	exit;
+fi;

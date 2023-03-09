@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "\nALL CONTAINERS IN NETWORK xampp-cloud-network\r"
+sudo docker ps --filter "network=xampp-cloud-network" --format "table {{.Names}}\t\t{{.Image}}\t\t{{.Ports}}"
+echo "\nPERFORMANCE STATUS STATUS --no-stream:\r"
+sudo docker stats --all --no-stream
+sudo docker ps --filter "network=xampp-cloud-network" --format "{{.Names}}" | awk '{print "sudo docker stats --no-stream --format \"table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\" "$1}' | sh | tail -n +2

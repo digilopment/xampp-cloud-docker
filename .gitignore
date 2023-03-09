@@ -1,0 +1,8 @@
+docker/.logs/*
+docker/volumes/*
+docker/import/*.sql
+!docker/import/xampp.sql
+docker/.env
+src/*
+!src/xampp
+

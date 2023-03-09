@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo docker-compose down
+sudo docker stop $(sudo docker ps -q --filter "network=xampp-cloud-network")
+sudo docker system prune

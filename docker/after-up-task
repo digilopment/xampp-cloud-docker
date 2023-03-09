@@ -1,0 +1,16 @@
+#!/bin/bash
+cd cmd;
+if [ $# -eq 0 ] ; then
+    param=""
+else
+    param=$1
+fi
+cmd="-rc";
+if [ "$param" = "$cmd" ]; then
+    sudo sh ./clear-cache.sh
+    echo 'Cache from all projects was removed...'
+fi
+sudo sh ./katka-sync.sh
+sudo sh ./elastic-reindex.sh
+sudo sh ./workers-run.sh
+
