@@ -21,6 +21,7 @@ services:
       - ../src:/var/www/html
       - ./images/apache2/virtual-hosts.conf:/etc/apache2/sites-enabled/virtual-hosts.conf:rw
       - ./images/apache2/php.ini:/usr/local/etc/php/php.ini:rw
+      - ./volumes/logs/:/var/log
     ports:
       - 80:80
       - 443:443
