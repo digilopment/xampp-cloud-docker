@@ -8,8 +8,8 @@ fi
 . ../.env
 if [ -e ./$2 ] ; then
    echo "Importing..."
-   sudo docker exec -i xampp-cloud-db mysql -h127.0.0.1 -uroot -p${MYSQL_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${1};"
-   sudo docker exec -i xampp-cloud-db mysql -h127.0.0.1 --max_allowed_packet=1024M -uroot -p${MYSQL_PASSWORD} --force $1 < $2
+   sudo docker exec -i ${PRIMARY_DATABASE_CONTAINER} mysql -h127.0.0.1 -uroot -p${MYSQL_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${1};"
+   sudo docker exec -i ${PRIMARY_DATABASE_CONTAINER} mysql -h127.0.0.1 --max_allowed_packet=1024M -uroot -p${MYSQL_PASSWORD} --force $1 < $2
 else
    echo "File does not exists"
 fi

@@ -27,10 +27,31 @@ services:
       - 443:443
     networks:
       - xampp-cloud
+      
+  mariadb:
+    build: 
+      context: ./images/mariadb
+      args:
+        - MARIADB_VERSION=${MARIADB_VERSION}
+    container_name: xampp-cloud-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIADB_PASSWORD}
+      MYSQL_PASSWORD: ${MARIADB_PASSWORD}
+      MYSQL_USER: root
+    restart: on-failure
+    volumes:
+      - ./volumes/mariadb:/var/lib/mysql
+    ports:
+      - ${MARIADB_PORT}:3306
+    networks:
+      - xampp-cloud
 
   mysql:
-    image: mysql:5.7.41
-    container_name: xampp-cloud-db
+    build: 
+      context: ./images/mysql
+      args:
+        - MYSQL_VERSION=${MYSQL_VERSION}
+    container_name: xampp-cloud-mysql
     command: mysqld --sql_mode=""
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
@@ -38,9 +59,8 @@ services:
     restart: on-failure
     volumes:
       - ./volumes/mysql:/var/lib/mysql
-      - ./images/mysql/my.cnf:/etc/my.cnf
     ports:
-      - '3306:3306'
+      - ${MYSQL_PORT}:3306
     networks:
       - xampp-cloud
 
@@ -52,8 +72,8 @@ services:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
-      - PMA_VERBOSE=mysql
       - UPLOAD_LIMIT=2048M
+      - PHP_MAX_EXECUTION_TIME=3600
     networks:
       - xampp-cloud
       

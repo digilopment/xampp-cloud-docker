@@ -1,12 +1,7 @@
-FROM mysql:5
-#FROM mysql:latest
+ARG MYSQL_VERSION
 
-# Copy custom configuration file to container
-COPY my.cnf /etc/mysql/conf.d/
+FROM mysql:${MYSQL_VERSION}
 
-# Expose port 3306 for MySQL
-EXPOSE 3306
+COPY my.cnf /etc/mysql/mariadb.conf.d/
 
-# Start MySQL server
 CMD ["mysqld"]
-
