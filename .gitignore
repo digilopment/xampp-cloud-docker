@@ -4,5 +4,5 @@ docker/import/*.sql
 !docker/import/xampp.sql
 docker/.env
 src/*
-!src/xampp
+!src/php-info
 
