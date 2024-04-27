@@ -11,7 +11,7 @@ else
 fi
 
 #env.sample
-if [ $ENVIROMENT == "production" ]; then
+if [ $ENVIROMENT = "production" ]; then
   echo "ENVIROMENT: production"
 else
   echo "ENVIROMENT: devel"
